@@ -87,7 +87,7 @@ exports.update = (req, res) => {
   }
 
   // Update Expense in the database
-  Expense.update(req.body, { where: { id: id } })
+  Expense.update(expense, { where: { id: id } })
     .then(num => {
       if(num == 1){
         res.send({ message: "Expense was updated successfully." })

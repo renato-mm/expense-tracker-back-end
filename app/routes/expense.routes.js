@@ -1,5 +1,5 @@
 module.exports = app => {
-  const expenses = require("../controllers/expense.controller.js");
+  const expenses = require("../controllers/expense.controller");
   var router = require("express").Router();
 
   // Create a Expense
