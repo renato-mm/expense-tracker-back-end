@@ -17,14 +17,11 @@ app.use(body_parser.json());
 app.use(body_parser.urlencoded({ extended: true }))
 
 const db = require("./app/models");
-db.sequelize.sync({ force: true }).then(() => {
+db.sequelize.sync();/*({ force: true }).then(() => {
   console.log("Drop and re-sync db.");
-});
+});*/
 
-// simple route
-app.get("/", (req,res) => {
-  res.json({ message: "Welcome to renato-mm application." });
-});
+require("./app/routes/expense.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

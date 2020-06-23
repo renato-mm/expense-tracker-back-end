@@ -1,5 +1,5 @@
 const { sequelize } = require(".");
-const { Sequelize } = require("sequelize/types");
+const { Sequelize } = require("sequelize");
 
 module.exports = (sequelize, Sequelize) => {
   const Expense = sequelize.define("expense", {
