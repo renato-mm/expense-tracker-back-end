@@ -8,6 +8,9 @@ module.exports = app => {
   // Retrieve all Expenses
   router.get("/", expenses.findAll);
 
+  // Retrieve Expenses by date
+  router.get("/date", expenses.findByDate);
+
   // Retrieve a single Expense with id
   router.get("/:id", expenses.findOne);
 

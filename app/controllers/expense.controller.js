@@ -36,8 +36,45 @@ exports.create = (req, res) => {
 
 // Retrieve all Expenses from the database.
 exports.findAll = (req, res) => {
-  const description = req.query.description;
-  var condition = description ? { description: { [Op.like]: `%${description}%` } } : null;
+  var condition = !req.query ? null :
+  Object.entries(req.query).map(e => ({ "key": e[0], "value": e[1] }))
+  .reduce((acc, entry)=>{
+    acc[entry.key] = { [Op.like]: `%${entry.value}%` };
+    return acc;
+  }, {});
+  console.log(condition)
+
+  Expense.findAll({ where: condition })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving the Expenses."
+      });
+    });
+};
+
+// Retrieve Expenses by date from the database.
+exports.findByDate = (req, res) => {
+  var condition = !req.query ? null :
+  req.query.ty === req.query.by ?
+  {
+    reference_month: { [Op.between]: [req.query.bm, req.query.tm] },
+    reference_year: { [Op.eq]: req.query.by }
+  } : 
+  {
+    [Op.or]: [
+      {
+        reference_month: { [Op.gte]: req.query.bm },
+        reference_year: { [Op.eq]: req.query.by }
+      },
+      {
+        reference_month: { [Op.lte]: req.query.tm },
+        reference_year: { [Op.eq]: req.query.ty }
+      }
+    ]
+  };
 
   Expense.findAll({ where: condition })
     .then(data => {
